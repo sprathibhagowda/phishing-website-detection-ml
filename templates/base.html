@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{% block title %}PhishGuard{% endblock %} · Phishing URL Detection</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+<nav class="nav">
+  <a href="{{ url_for('home') }}" class="brand"><i>🛡️</i>Phish<span class="grad-text">Guard</span></a>
+  <button class="burger" id="burger" aria-label="menu">☰</button>
+  <div class="links" id="links">
+    <a href="{{ url_for('home') }}" class="{{ 'active' if request.endpoint=='home' }}">Home</a>
+    {% if session.user_id %}
+      <a href="{{ url_for('dashboard') }}" class="{{ 'active' if request.endpoint=='dashboard' }}">Dashboard</a>
+      <a href="{{ url_for('predict') }}" class="{{ 'active' if request.endpoint=='predict' }}">Predict</a>
+      <a href="{{ url_for('logout') }}">Logout · {{ session.user_name }}</a>
+    {% else %}
+      <a href="{{ url_for('login') }}">Login</a>
+      <a href="{{ url_for('register') }}" class="cta">Get started</a>
+    {% endif %}
+  </div>
+</nav>
+{% with msgs = get_flashed_messages(with_categories=true) %}
+{% if msgs %}<div class="flashes">{% for c,m in msgs %}<div class="flash {{ c }}">{{ m }}</div>{% endfor %}</div>{% endif %}
+{% endwith %}
+{% block body %}{% endblock %}
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

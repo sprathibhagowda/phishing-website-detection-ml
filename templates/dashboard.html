@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard{% endblock %}
+{% block body %}
+<main class="page"><div class="wrap">
+  <div class="dash-head">
+    <div><span class="chip">DASHBOARD</span><h1>Hey, <span class="grad-text">{{ session.user_name }}</span> 👋</h1></div>
+    <a class="btn" href="{{ url_for('predict') }}">+ New scan</a>
+  </div>
+  <div class="grid g3" style="margin-bottom:24px">
+    <div class="card stat"><b class="grad-text">{{ total }}</b><span>Total scans</span></div>
+    <div class="card stat"><b style="color:var(--safe)">{{ safe }}</b><span>Safe links</span></div>
+    <div class="card stat"><b style="color:var(--risk)">{{ phishing }}</b><span>Phishing detected</span></div>
+  </div>
+  <div class="card" style="padding:20px">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:6px 8px 14px">
+      <h3>Prediction history</h3>
+      <input class="search" id="q" placeholder="🔎 Search by URL or verdict">
+    </div>
+    {% if rows %}
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>ID</th><th>URL</th><th>Verdict</th><th>Safe score</th><th>Date</th><th style="text-align:right">Actions</th></tr></thead>
+      <tbody>
+      {% for r in rows %}
+        <tr>
+          <td class="pid">#{{ r.id }}</td>
+          <td class="url-cell" title="{{ r.url }}">{{ r.url }}</td>
+          <td><span class="badge {{ r.verdict }}">{{ '✔ Safe' if r.verdict=='safe' else '⚠ Phishing' }}</span></td>
+          <td><div class="bar"><i style="width:{{ r.safe_pct }}%;background:{{ 'var(--safe)' if r.verdict=='safe' else 'var(--risk)' }}"></i></div><small style="color:var(--muted)">{{ '%.1f'|format(r.safe_pct) }}%</small></td>
+          <td style="color:var(--muted);font-size:.88rem">{{ r.created_at|pretty_date }}</td>
+          <td><div class="acts">
+            <a class="btn ghost sm" href="{{ url_for('result', pid=r.id) }}">View</a>
+            <form method="post" action="{{ url_for('delete', pid=r.id) }}" data-confirm="Delete prediction #{{ r.id }}?"><button class="btn danger sm">Delete</button></form>
+          </div></td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table></div>
+    {% else %}
+    <div class="empty"><div class="big">🫥</div><h3>No scans yet</h3><p style="margin-bottom:18px">Run your first prediction and it'll show up here.</p><a class="btn" href="{{ url_for('predict') }}">Scan a URL</a></div>
+    {% endif %}
+  </div>
+</div></main>
+{% endblock %}

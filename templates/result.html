@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block title %}Result #{{ p.id }}{% endblock %}
+{% block body %}
+{% set is_safe = p.verdict == 'safe' %}
+<main class="page"><div class="wrap">
+  <div class="res-top">
+    <div class="card gauge">
+      <div>
+        <div class="ring" data-v="{{ p.safe_pct }}" style="--c:{{ 'var(--safe)' if is_safe else 'var(--risk)' }}"><b><span class="n">0%</span><small>SAFE SCORE</small></b></div>
+        <span class="badge {{ p.verdict }}">{{ '✔ Looks safe' if is_safe else '⚠ Likely phishing' }}</span>
+      </div>
+    </div>
+    <div class="card">
+      <span class="chip">PREDICTION #{{ p.id }} · {{ p.created_at|pretty_date }}</span>
+      <h1 class="verdict {{ p.verdict }}">{{ 'This website looks safe to use' if is_safe else 'Danger! This looks like a phishing website' }}</h1>
+      <span class="url-pill">🔗 {{ p.url }}</span>
+      <div class="meter">
+        <div><div class="row"><span>Safe probability</span><b>{{ '%.2f'|format(p.safe_pct) }}%</b></div><div class="bar"><i style="width:{{ p.safe_pct }}%;background:var(--safe)"></i></div></div>
+        <div><div class="row"><span>Phishing probability</span><b>{{ '%.2f'|format(p.phish_pct) }}%</b></div><div class="bar"><i style="width:{{ p.phish_pct }}%;background:var(--risk)"></i></div></div>
+      </div>
+      <div class="counts">
+        <span class="badge safe">{{ counts.safe }} safe signals</span>
+        <span class="badge warn">{{ counts.warn }} suspicious</span>
+        <span class="badge risk">{{ counts.risk }} risky</span>
+      </div>
+      <div class="row" style="display:flex;gap:10px;margin-top:24px;flex-wrap:wrap">
+        <a class="btn" href="{{ url_for('predict') }}">Scan another</a>
+        <a class="btn ghost" href="{{ url_for('dashboard') }}">Back to dashboard</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="filters">
+    <button class="on" data-f="all">All 30</button>
+    <button data-f="risk">Risky</button><button data-f="warn">Suspicious</button><button data-f="safe">Safe</button>
+    <button data-f="URL">URL</button><button data-f="Domain">Domain</button><button data-f="Page">Page</button><button data-f="Reputation">Reputation</button>
+  </div>
+  <div class="fgrid">
+    {% for f in feats %}
+    <div class="fcard {{ f.status }}" data-s="{{ f.status }}" data-g="{{ f.group }}">
+      <div class="dotc">{{ '✓' if f.status=='safe' else ('!' if f.status=='warn' else '✕') }}</div>
+      <div><h4>{{ f.label }}</h4><p>{{ f.desc }}</p>
+      <div class="meta">{{ f.group }} · {{ 'Safe' if f.status=='safe' else ('Suspicious' if f.status=='warn' else 'Risky') }} ({{ f.value }})</div></div>
+    </div>
+    {% endfor %}
+  </div>
+</div></main>
+{% endblock %}

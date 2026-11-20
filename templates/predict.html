@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %}Predict{% endblock %}
+{% block body %}
+<main class="pred-wrap"><div class="pred-box">
+  <span class="chip">URL SCANNER</span>
+  <h1>Is that link <span class="grad-text">legit or lowkey a trap?</span></h1>
+  <p>Paste any website address below and we'll run it through 30 checks.</p>
+  <form method="post" id="predForm">
+    <div class="urlbar">
+      <span>🔗</span>
+      <input type="text" id="urlInput" name="url" required autofocus autocomplete="off" spellcheck="false" placeholder="example.com/login">
+      <button class="btn">Analyse ⚡</button>
+    </div>
+  </form>
+  <div class="tips">
+    <button class="chip" data-fill="google.com">google.com</button>
+    <button class="chip" data-fill="github.com">github.com</button>
+    <button class="chip" data-fill="wikipedia.org">wikipedia.org</button>
+  </div>
+</div></main>
+<div class="scan" id="scan"><div><div class="radar"></div><h3>Scanning URL…</h3><p>Checking domain, page and reputation signals</p></div></div>
+{% endblock %}

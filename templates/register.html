@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block title %}Register{% endblock %}
+{% block body %}
+<main class="auth"><div class="card auth-card">
+  <span class="chip">JOIN THE SQUAD</span>
+  <h1>Create <span class="grad-text">account</span></h1>
+  <p class="sub">Takes less than 30 seconds.</p>
+  <form method="post">
+    <div class="field"><label>USERNAME</label><input name="name" required minlength="3" placeholder="choose a username"></div>
+    <div class="field"><label>EMAIL</label><input type="email" name="email" required placeholder="you@email.com"></div>
+    <div class="field"><label>MOBILE</label><input name="phone" required pattern="[0-9+ ]{7,15}" placeholder="9876543210"></div>
+    <div class="field"><label>PASSWORD</label><div class="pw"><input type="password" name="password" required minlength="4" placeholder="min 4 characters"><button type="button">👁</button></div></div>
+    <button class="btn">Sign up →</button>
+  </form>
+  <p class="alt">Already registered? <a href="{{ url_for('login') }}">Login</a></p>
+</div></main>
+{% endblock %}

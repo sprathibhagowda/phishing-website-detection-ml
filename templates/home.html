@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% block title %}Home{% endblock %}
+{% block body %}
+<header class="hero" id="hero" data-seconds="{{ slide_seconds }}">
+  {% for s in slides %}
+  <div class="slide" data-img="{{ s.image }}">
+    <div class="bg"></div>
+    <div class="copy"><div class="wrap">
+      <span class="chip">{{ s.tag }}</span>
+      <h1>{{ s.title }}</h1>
+      <p>{{ s.text }}</p>
+      <div class="row">
+        <a class="btn" href="{{ url_for('predict') }}">Scan a URL ⚡</a>
+        <a class="btn ghost" href="#about">How it works</a>
+      </div>
+    </div></div>
+  </div>
+  {% endfor %}
+  <div class="scroll">SCROLL ↓</div>
+  <div class="hero-ui"><div class="wrap">
+    <div class="dots">{% for s in slides %}<button class="dot" aria-label="slide {{ loop.index }}"><i></i></button>{% endfor %}</div>
+    <div class="arrows">
+      <button id="restart" style="visibility:hidden;width:auto;padding:0 18px;border-radius:999px;font-size:.85rem" title="Replay">↺ Replay</button>
+      <button id="prev">←</button><button id="next">→</button>
+    </div>
+  </div></div>
+</header>
+
+<section class="block" id="about"><div class="wrap">
+  <div class="sec-head reveal">
+    <span class="chip">ABOUT THE PROJECT</span>
+    <h2>Phishing detection that actually <span class="grad-text">explains itself</span></h2>
+    <p>Phishing sites copy trusted brands to steal passwords, cards and identities. This project reads a link's structure, domain details and page behaviour, then a trained Gradient Boosting model tells you how likely it is to be a trap.</p>
+  </div>
+  <div class="grid g4">
+    <div class="card stat reveal"><b class="grad-text" data-count="30">0</b><span>URL &amp; page features analysed</span></div>
+    <div class="card stat reveal"><b class="grad-text" data-count="93.4" data-suffix="%">0</b><span>Test accuracy of the model</span></div>
+    <div class="card stat reveal"><b class="grad-text" data-count="11055">0</b><span>Labelled URLs in training data</span></div>
+    <div class="card stat reveal"><b class="grad-text">&lt; 10s</b><span>Typical time to a verdict</span></div>
+  </div>
+</div></section>
+
+<section class="block"><div class="wrap">
+  <div class="sec-head reveal"><span class="chip">WHAT YOU GET</span><h2>Built different, <span class="grad-text">built safe</span></h2></div>
+  <div class="grid g3">
+    <div class="card feat reveal"><div class="ic">🔍</div><h3>Deep URL analysis</h3><p>IP addresses, @ symbols, hyphens, shorteners, sub-domains, URL length and HTTPS usage are all checked.</p></div>
+    <div class="card feat reveal"><div class="ic">🌐</div><h3>Domain &amp; page signals</h3><p>WHOIS age, DNS records, forms, iframes, pop-ups, redirects and external resource ratios.</p></div>
+    <div class="card feat reveal"><div class="ic">🧠</div><h3>ML-powered verdict</h3><p>A Gradient Boosting classifier returns a safe and phishing probability for every link.</p></div>
+    <div class="card feat reveal"><div class="ic">📊</div><h3>Feature breakdown</h3><p>Each of the 30 signals is shown as safe, suspicious or risky with a plain-English reason.</p></div>
+    <div class="card feat reveal"><div class="ic">🗂️</div><h3>Scan history</h3><p>Every prediction is saved to your dashboard so you can view or delete it any time.</p></div>
+    <div class="card feat reveal"><div class="ic">🔐</div><h3>Private accounts</h3><p>Secure sign-up and login with hashed passwords. Your history is only yours.</p></div>
+  </div>
+</div></section>
+
+<section class="block"><div class="wrap">
+  <div class="sec-head reveal"><span class="chip">HOW IT WORKS</span><h2>Three steps. <span class="grad-text">Zero stress.</span></h2></div>
+  <div class="grid g3 steps">
+    <div class="card step reveal"><h3>Drop the link</h3><p>Paste any URL, with or without http, into the predict page.</p></div>
+    <div class="card step reveal"><h3>We scan it</h3><p>30 features are extracted and fed to the trained model.</p></div>
+    <div class="card step reveal"><h3>Get the verdict</h3><p>See the safe vs phishing score plus a full feature report.</p></div>
+  </div>
+</div></section>
+
+<section class="block"><div class="wrap"><div class="band reveal">
+  <h2>Ready to check a <span class="grad-text">sketchy link?</span></h2>
+  <p style="color:var(--muted);margin-bottom:26px">Create a free account and start scanning in seconds.</p>
+  {% if session.user_id %}<a class="btn" href="{{ url_for('predict') }}">Go to Predict ⚡</a>
+  {% else %}<a class="btn" href="{{ url_for('register') }}">Create account</a> <a class="btn ghost" href="{{ url_for('login') }}">I have one</a>{% endif %}
+</div></div></section>
+<footer>PhishGuard · Phishing Website Prediction using URL · Flask + scikit-learn</footer>
+{% endblock %}
