@@ -2,3 +2,6 @@
 __pycache__/
 .ipynb_checkpoints/
 user_data.db
+.env
+.env.*
+.venv*/
